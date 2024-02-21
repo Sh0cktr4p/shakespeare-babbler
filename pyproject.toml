@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shakespeare_babbler"
+authors = [
+    {name = "Felix Trost", email = "fxtrost@gmail.com"},
+]
+description = "An infinite text generator transformer language model"
+readme = "README.md"
+version = "0.0.1"
+requires-python = ">=3.10"
+dependencies = [
+    "hydra-core",
+    "torch",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -3,7 +3,7 @@ from threading import Thread
 
 import hydra
 
-from utils import TransformerTrainer
+from shakespeare_babbler.utils import TransformerTrainer
 
 
 def text_iterator(trainer: TransformerTrainer, n_tokens, context=None):
@@ -29,7 +29,7 @@ def text_iterator(trainer: TransformerTrainer, n_tokens, context=None):
         thread.join()
 
 
-@hydra.main(config_path="config", config_name="shakespeare-babbler")
+@hydra.main(config_path="config", config_name="shakespeare-babbler", version_base=None)
 def main(cfg):
     trainer = TransformerTrainer.from_config(cfg, load_state_dict=True)
 

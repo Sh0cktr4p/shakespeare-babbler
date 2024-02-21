@@ -5,7 +5,7 @@ import torch as th
 from omegaconf import OmegaConf
 
 from .text_dataset_loader import TextDatasetLoader
-from ..transformer_model import TransformerModel
+from shakespeare_babbler.transformer_model import TransformerModel
 
 
 class TransformerTrainer:
