@@ -81,12 +81,12 @@ class TransformerTrainer:
     ) -> str:
         if context is None:
             context = "\n"
-        context = self._text_dataset_loader.encode(context)
+        context = self._text_dataset_loader.encode(context).unsqueeze(0)
 
         in_training_mode = self._model.training
         self._model.eval()
         text = self._text_dataset_loader.decode(
-            self._model.generate(context, max_new_tokens=n_tokens)
+            self._model.generate(context, max_new_tokens=n_tokens).squeeze(0)
         )
         self._model.train(in_training_mode)
         return text
@@ -95,7 +95,7 @@ class TransformerTrainer:
         for i in range(n_train_iterations):
             if i % self._eval_interval == 0:
                 losses = self._estimate_losses()
-                print(f"Iteration {i}: {losses}")
+                print(f"Iteration {i}")
                 print(f"Training loss: {losses['training']}, Validation loss: {losses['validation']}")
 
                 if self._n_tokens_to_gen_on_eval is not None:

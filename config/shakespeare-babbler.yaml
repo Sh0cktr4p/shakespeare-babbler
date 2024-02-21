@@ -11,9 +11,9 @@ training:
   batch_size: 64
   n_iterations: 5000
   eval_interval: 500
-  eval_iterations: 100
+  n_eval_iterations: 100
   train_frac: 0.9
   seed: 42
-  n_tokens_to_generate_on_eval: 100
+  n_tokens_to_gen_on_eval: 100
   model_save_path: models/shakespeare-babbler.pt
   device: cuda

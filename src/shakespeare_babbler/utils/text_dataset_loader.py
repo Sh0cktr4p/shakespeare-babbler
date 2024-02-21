@@ -12,16 +12,16 @@ class TextDatasetLoader:
         train_frac: float = 0.8,
         device: str = "cpu",
     ):
+        self._device = device
         self._path = path
         self._train_frac = train_frac
         self._batch_size = batch_size
         self._block_size = block_size
-        self._dataset_text = self._read_dataset_text(path)
+        self._dataset_text = self._read_dataset_text(path=path)
         self._chars = self._get_char_list(self._dataset_text)
         self._stoi = {ch: i for i, ch in enumerate(self._chars)}
         self._itos = {i: ch for i, ch in enumerate(self._chars)}
         self._data = self.encode(self._dataset_text)
-        self._device = device
 
     @property
     def vocab_size(self) -> int:
@@ -46,7 +46,7 @@ class TextDatasetLoader:
         return th.tensor([self._stoi[ch] for ch in text], dtype=th.long).to(self._device)
 
     def decode(self, indices: th.Tensor) -> str:
-        return "".join([self._itos[i] for i in indices.cpu().numpy()])
+        return "".join([self._itos[i] for i in indices.cpu().tolist()])
 
     def get_batch(self, data: th.tensor):
         ix = th.randint(len(data) - self._block_size, (self._batch_size,))
@@ -61,10 +61,10 @@ class TextDatasetLoader:
         return self.get_batch(self.validation_data)
 
     @staticmethod
-    def _read_dataset_text(self, path: str) -> str:
+    def _read_dataset_text(path: str) -> str:
         with open(path, "r") as f:
             return f.read()
 
     @staticmethod
-    def _get_char_list(self, text: str) -> List[str]:
+    def _get_char_list(text: str) -> List[str]:
         return sorted(list(set(text)))
