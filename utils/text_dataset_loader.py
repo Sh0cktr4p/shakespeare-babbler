@@ -10,6 +10,7 @@ class TextDatasetLoader:
         batch_size: int,
         block_size: int,
         train_frac: float = 0.8,
+        device: str = "cpu",
     ):
         self._path = path
         self._train_frac = train_frac
@@ -20,6 +21,7 @@ class TextDatasetLoader:
         self._stoi = {ch: i for i, ch in enumerate(self._chars)}
         self._itos = {i: ch for i, ch in enumerate(self._chars)}
         self._data = self.encode(self._dataset_text)
+        self._device = device
 
     @property
     def vocab_size(self) -> int:
@@ -41,10 +43,10 @@ class TextDatasetLoader:
         }
 
     def encode(self, text: str) -> th.Tensor:
-        return th.tensor([self._stoi[ch] for ch in text], dtype=th.long)
+        return th.tensor([self._stoi[ch] for ch in text], dtype=th.long).to(self._device)
 
     def decode(self, indices: th.Tensor) -> str:
-        return "".join([self._itos[i] for i in indices])
+        return "".join([self._itos[i] for i in indices.cpu().numpy()])
 
     def get_batch(self, data: th.tensor):
         ix = th.randint(len(data) - self._block_size, (self._batch_size,))

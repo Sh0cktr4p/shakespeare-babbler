@@ -25,12 +25,17 @@ class TransformerTrainer:
         n_tokens_to_gen_on_eval: int | None = None,
         model_save_path: str | None = None,
         seed: int | None = None,
+        device: str = "cpu",
     ):
+        if device == "cuda" and not th.cuda.is_available():
+            raise ValueError("CUDA is not available on this machine")
+
         self._text_dataset_loader = TextDatasetLoader(
             path=dataset_path,
             batch_size=batch_size,
             block_size=block_size,
             train_frac=train_frac,
+            device=device,
         )
         self._model = TransformerModel(
             vocab_size=self._text_dataset_loader.vocab_size,
@@ -39,7 +44,7 @@ class TransformerTrainer:
             n_heads=n_heads,
             n_layers=n_layers,
             p_dropout=p_dropout,
-        )
+        ).to(device)
 
         self._optimizer = th.optim.Adam(
             self._model.parameters(),
@@ -129,6 +134,7 @@ class TransformerTrainer:
             n_tokens_to_gen_on_eval=config.training.n_tokens_to_gen_on_eval,
             model_save_path=config.training.model_save_path,
             seed=config.training.seed,
+            device=config.training.device,
         )
 
         if load_state_dict and config.training.model_save_path is not None:
