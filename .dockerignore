@@ -1,0 +1,11 @@
+.vscode
+.git
+.gittoken
+outputs
+/build
+/models
+/data
+/logs
+*.egg-info
+*.egg
+__pycache__

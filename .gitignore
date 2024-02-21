@@ -1,6 +1,9 @@
+.vscode
 /data/*
 /models/*
+/logs/*
 /build
 /outputs/
 __pycache__
 *.egg-info
+*.egg
